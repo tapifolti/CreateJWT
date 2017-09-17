@@ -10,29 +10,13 @@ import junit.framework.TestSuite;
 public class GenerateJWTTest
     extends TestCase
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public GenerateJWTTest(String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( GenerateJWTTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    public void testGenerate() {
+        GenerateJWT gen = new GenerateJWT();
+        String token = gen.generate("keys\\jwttestprivkey.pem", "SelectSpecs", "OrderId1234", "test@gmail.com", true);
+        assertTrue( token != null && !token.isEmpty());
+        assertTrue( gen.verify("keys\\jwttestpubkey.pem", token));
+        System.out.println("token tampered");
+        token = token.substring(0, token.length()-1) + "=";
+        assertFalse( gen.verify("keys\\jwttestpubkey.pem", token));
     }
 }
